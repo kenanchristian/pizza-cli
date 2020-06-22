@@ -1,6 +1,13 @@
 import {Command, flags} from '@oclif/command'
 import {prompt} from 'inquirer'
 
+interface PizzaData {
+  crust: string;
+  toppings: string[];
+  extraSauce: boolean;
+  count: number;
+}
+
 export default class Create extends Command {
   static description = 'Create a new Pizza'
 
@@ -73,8 +80,16 @@ Your pizza is ready!
   }
 
   async run() {
-    // const {args, flags} = this.parse(Create)
-    const interactiveArgs = await this.getInteractiveArgs()
-    this.log(JSON.stringify(interactiveArgs))
+    const {args, flags} = this.parse(Create)
+    const {count} = args
+    const {toppings, crust, extraSauce} = flags
+    let pizzaData: PizzaData
+    if (count !== null && count > 0 && toppings.length > 0 && crust) {
+      pizzaData = {count, toppings, crust, extraSauce}
+    } else {
+      pizzaData = await this.getInteractiveArgs()
+    }
+
+    this.log(JSON.stringify(pizzaData))
   }
 }
