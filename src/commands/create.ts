@@ -2,7 +2,7 @@
 import {Command, flags} from '@oclif/command'
 import {prompt} from 'inquirer'
 import {SingleBar, Presets} from 'cli-progress'
-import {blue, yellow, green} from 'chalk'
+import {yellow, green, cyan} from 'chalk'
 import {sleep} from '../lib/util'
 
 interface PizzaData {
@@ -64,7 +64,24 @@ Your pizza is ready!
         name: 'toppings',
         message: 'What do you want to add as toppings?',
         default: '',
-        choices: ['Pepperoni', 'Mushroom', 'Bacon', 'Pineapple'],
+        choices: [
+          {
+            name: '🍖 Pepperoni',
+            value: 'pepperoni',
+          },
+          {
+            name: '🍄 Mushroom',
+            value: 'mushroom',
+          },
+          {
+            name: '🥓 Bacon',
+            value: 'bacon',
+          },
+          {
+            name: '🍍 Pineapple',
+            value: 'pineapple',
+          },
+        ],
         validate(value) {
           if (value.length === 0) {
             return 'You should add at least 1 topping'
@@ -86,10 +103,10 @@ Your pizza is ready!
   async makePizza(pizzaData: PizzaData) {
     const {crust, toppings, extraSauce, count} = pizzaData
 
-    this.log(yellow('Order taken! Making your pizza!'))
+    this.log(yellow('Order taken! Making your 🍕!'))
 
     const progressBar = new SingleBar({
-      format: `Pizza Progress | ${blue('{bar}')} | {percentage}% | ETA: {eta}s`,
+      format: `Pizza Progress | ${cyan('{bar}')} | {percentage}% | ETA: {eta}s`,
     }, Presets.shades_classic)
 
     progressBar.start((count * toppings.length), 0)
@@ -113,6 +130,7 @@ Your pizza is ready!
   }
 
   async run() {
+    this.log(green('Welcome to the 🍕 Maker!'))
     const {args, flags} = this.parse(Create)
     const {count} = args
     const {toppings, crust, extraSauce} = flags
@@ -125,6 +143,6 @@ Your pizza is ready!
 
     await this.makePizza(pizzaData)
 
-    green('Your pizza is ready!')
+    this.log(green('Your 🍕 is ready!'))
   }
 }
