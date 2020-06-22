@@ -1,5 +1,9 @@
+/* eslint-disable no-await-in-loop */
 import {Command, flags} from '@oclif/command'
 import {prompt} from 'inquirer'
+import {SingleBar, Presets} from 'cli-progress'
+import {blue, yellow, green} from 'chalk'
+import {sleep} from '../lib/util'
 
 interface PizzaData {
   crust: string;
@@ -79,6 +83,35 @@ Your pizza is ready!
     return answer
   }
 
+  async makePizza(pizzaData: PizzaData) {
+    const {crust, toppings, extraSauce, count} = pizzaData
+
+    this.log(yellow('Order taken! Making your pizza!'))
+
+    const progressBar = new SingleBar({
+      format: `Pizza Progress | ${blue('{bar}')} | {percentage}% | ETA: {eta}s`,
+    }, Presets.shades_classic)
+
+    progressBar.start((count * toppings.length), 0)
+
+    // Create pizza to count
+    const pizzaToMake = new Array(count).fill({crust, toppings, extraSauce})
+    for (const pizza of pizzaToMake) {
+      await sleep(1000)
+
+      for (const _ of pizza.toppings) {
+        progressBar.increment()
+        await sleep(1000)
+      }
+
+      if (pizza.extraSauce) {
+        await sleep(1000)
+      }
+    }
+
+    progressBar.stop()
+  }
+
   async run() {
     const {args, flags} = this.parse(Create)
     const {count} = args
@@ -90,6 +123,8 @@ Your pizza is ready!
       pizzaData = await this.getInteractiveArgs()
     }
 
-    this.log(JSON.stringify(pizzaData))
+    await this.makePizza(pizzaData)
+
+    green('Your pizza is ready!')
   }
 }
