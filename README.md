@@ -28,28 +28,32 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`pizza hello [FILE]`](#pizza-hello-file)
+* [`pizza create [COUNT]`](#pizza-create-count)
 * [`pizza help [COMMAND]`](#pizza-help-command)
 
-## `pizza hello [FILE]`
+## `pizza create [COUNT]`
 
-describe the command here
+Create a new Pizza
 
 ```
 USAGE
-  $ pizza hello [FILE]
+  $ pizza create [COUNT]
+
+ARGUMENTS
+  COUNT  How many pizza you want to create
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -c, --crust=crust                                  Type of Crust (Thin/Thick)
+  -h, --help                                         show CLI help
+  -t, --toppings=pepperoni|mushroom|bacon|pineapple  Toppings to add
+  -x, --extraSauce                                   Do you want extra sauce?
 
 EXAMPLE
-  $ pizza hello
-  hello world from ./src/hello.ts!
+  $ pizza create
+  Your pizza is ready!
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/kenanchristian/pizza-cli/blob/v0.0.0/src/commands/hello.ts)_
+_See code: [src/commands/create.ts](https://github.com/kenanchristian/pizza-cli/blob/v0.0.0/src/commands/create.ts)_
 
 ## `pizza help [COMMAND]`
 
